@@ -1,21 +1,22 @@
 version: 0.2
-env:
-  variables:
-    APP_NAME: "angularCICD"
 phases:
   install:
-    runtime-versions:
-      nodejs: 14.x
     commands:
-      - echo install process started
-      - npm install && npm install -g @angular/cli
+      - echo "Installing dependencies..."
+      - npm ci
+  #pre_build:
+    #commands:
+      # - echo "I don't need pre_build commands"
+      # - command
   build:
     commands:
-      - echo build process started now
-      - ng build --configuration=production
-  post_build:
-    commands:
-      - echo build process finished, we should uplload to S3 now
-      - cd dist/$APP_NAME
-      - ls -la
-      - aws s3 sync . s3://angulardemo-zappy --delete
+      - echo "Building project"
+      - npm run build
+  # post_build:
+  #   commands:
+  #     - ls -ll
+  #     - ls -ll dist/ng-cv/
+artifacts:
+  files:
+    - '**/*'
+  base-directory: 'dist/ng-cv/'
